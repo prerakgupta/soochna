@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>My Webpage</title>
+    <script type="text/javascript" src="//code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static', filename='css/app.css') }}">
+</head>
+<body>
+    <div id="menu-bar" style="background-color: antiquewhite;">
+      <nav>
+        <ul id="navigation" >
+        {% for item in domains %}
+            <li class="nav_bar" style="display: inline"><a href="#{{item}}">{{ item }}</a></li>
+        {% endfor %}
+        </ul>
+      </nav>
+    </div>
+    
+    <div>
+
+      <div class="chat_area" >
+        <div class="user_message" >
+          <p class="message">What is my name in the wild of thr world out there?</p>
+        </div>
+        <div class="bot_message" >
+          <p class="message">My name is Prerak Gupta bitch and it never goes beyond it.</p>
+          <span class="show_more message"><a href="#">Show more</a></span> 
+        </div>
+        <div class="user_message" >
+          <p class="message">What is my name in the wild of thr world out there?</p>
+        </div>
+        <div class="bot_message" >
+          <p class="message">My name is Prerak Gupta bitch and it never goes beyond it.</p>
+          <span class="show_more message"><a href="#">Show more</a></span> 
+        </div>
+      </div>  
+      <div class="input_query">
+        <input type="input" class="chat_input" placeholder="Your query goes here.."></input>
+      </div>
+
+      <div>
+        <p> Show user settings</p>
+        <form id="query_settings" action="#" method="post">
+          <ul>
+              <li>
+                <label for="context">Context:</label>
+                <textarea class="context_input" placeholder="{country: India, gender: female}"></textarea> 
+              </li>
+              <li>
+                <label for="use_context">Use Context:</label>
+                <input type="radio" id="123" name="use_context" value="true" checked>
+                <input type="radio" id="123" name="use_context" value="flase">
+              </li>
+              <li>
+                <label for="threshold">Threshold:</label>
+                0.90 <input type="radio" name="thresh" value="0.90" checked>
+                0.80 <input type="radio" name="thresh" value="0.80">
+                0.70 <input type="radio" name="thresh" value="0.70">
+              </li>
+              <li>
+                <label for="context">Domain: </label>
+                <input type="text" value="Visa" class="field left" readonly>
+              </li>  
+            </ul>
+        </form>
+      </div>
+    </div>  
+</body>
+</html>
