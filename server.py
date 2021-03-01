@@ -13,12 +13,13 @@ def chat():
   return render_template('index.html', domains=domains)
 
 
-@app.route('/response')
+@app.route('/response', methods=["POST"])
 def query_response():
   print(request.form)
   return({
-    "name": "Prerak",
-    "class": "WS"
+    "data": "Finally it works",
+    "modal_id": 12,
+    "success": True
     })
 
 if __name__ == "__main__":

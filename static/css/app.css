@@ -13,11 +13,18 @@ li.nav_bar {
 a{
   text-decoration: none;
   color: black;
-  /*padding: 2vw;*/
-  font-family: monospace;
+  font-family: 'Garamond', 'Georgia', serif;
 }
-a:hover{
+
+.nav_bar a:hover, .show_more a:hover{
   background-color: #C6E9FF;
+}
+
+a.setting_links {
+  font-family: 'Garamond', 'Georgia', serif;
+  font-size: 24px;
+  color: brown;
+  font-weight: bold;
 }
 
 nav{
@@ -25,7 +32,7 @@ nav{
 }
 
 input {
-  font-family: monospace;
+  font-family: 'Garamond', 'Georgia', serif;
   border-radius: 20px;
 }
 
@@ -33,30 +40,41 @@ input.chat_input{
   height: 60px;
   width: 700px;
   margin-top: 20px;
+  margin-left: 10px;
   font-size: 25px;
 }
 
 .context_input {
-  font-family: monospace;
+  font-family: 'Garamond', 'Georgia', serif;
   border-radius: 20px;
   height: 150px;
-  widows: 350px;
+  width: 350px;
   font-size: 20px;
+  margin-left: 25px;
+  text-align:center;
+  line-height: 40px;
 }
 
 .message {
-  font-family: monospace;
-  font-size: 13px;
+  font-family: 'Garamond', 'Georgia', serif;
+  font-size: 15px;
+}
+
+.bot_message .message {
+  padding-right: 30px;
+}
+
+.user_message .message {
+  padding-left: 30px;
 }
 
 .user_message {
   background-color: #f1f1f1;
   border-radius: 5px;
-  padding: 10px;
+  padding: 8px;
   margin: 10px 0;
-  float: left;
-  display: block;
-  border-radius: 40px;
+  border-radius: 30px;
+  text-align: left;
 }
 
 .user_message::after {
@@ -68,10 +86,10 @@ input.chat_input{
 .bot_message {
   border-color: #ccc;
   background-color: #ddd;
-  padding: 10px;
-  margin: 10px 0;
-  float: right;
+  padding: 8px;
+  margin: 0 0;
   border-radius: 40px;
+  text-align: right;
 }
 
 .bot_message::after {
@@ -81,10 +99,12 @@ input.chat_input{
 }
 
 .chat_area {
-  height: auto;
+  max-height: 400px;
   width: 700px;
   padding: 20px 20px;
   margin-top: 40px;
+  margin-left: 10px;
+  overflow-y:auto
 }
 
 .show_more {
@@ -92,5 +112,46 @@ input.chat_input{
   margin-right: 20px;
 }
 
-  /*padding: 10px;
-  margin: 10px 0;*/
+.settings {
+  margin-left: 60px;
+}
+
+.label_text {
+  font-family: 'Garamond', 'Georgia', serif;
+  font-size: 18px;
+}
+
+.error {
+  color: darkred;
+  font-family: 'Garamond', 'Georgia', serif;
+  font-size: 16px;
+  text-align: center;
+}
+
+.modal_class {
+  position: fixed;
+  text-align: center; 
+  height: 50%;
+  width: 50%; 
+  top: 18%;
+  left: 45%;
+  z-index: 11111; 
+}
+
+.modal_content {
+  background-color: #fff; 
+  box-shadow: 10px 10px 60px #555; 
+  max-width: 550px; 
+  min-height: 250px; 
+  padding: 15px 5%; 
+  margin-top: 10%; 
+  margin-left: 25%
+}
+
+.popup_close_button {
+  position: relative; 
+  top: -60px; 
+  right: -25px; 
+  font-size: 20px; 
+  float: right;
+}

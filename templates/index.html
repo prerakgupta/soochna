@@ -3,7 +3,7 @@
 <head>
     <title>My Webpage</title>
     <script type="text/javascript" src="//code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static', filename='css/app.css') }}">
 </head>
 <body>
@@ -17,54 +17,145 @@
       </nav>
     </div>
     
-    <div>
+    <div id="error_div">
+    </div>  
 
-      <div class="chat_area" >
-        <div class="user_message" >
-          <p class="message">What is my name in the wild of thr world out there?</p>
+    <div style="display: flex;">
+      <div>
+        <div class="chat_area" style="display: inline-grid;">
         </div>
-        <div class="bot_message" >
-          <p class="message">My name is Prerak Gupta bitch and it never goes beyond it.</p>
-          <span class="show_more message"><a href="#">Show more</a></span> 
+        <div>
+          <input type="input" id="input_query" class="chat_input" onkeypress="onQueryChange();" placeholder="Your query goes here.."></input>
         </div>
-        <div class="user_message" >
-          <p class="message">What is my name in the wild of thr world out there?</p>
-        </div>
-        <div class="bot_message" >
-          <p class="message">My name is Prerak Gupta bitch and it never goes beyond it.</p>
-          <span class="show_more message"><a href="#">Show more</a></span> 
-        </div>
-      </div>  
-      <div class="input_query">
-        <input type="input" class="chat_input" placeholder="Your query goes here.."></input>
       </div>
 
-      <div>
-        <p> Show user settings</p>
-        <form id="query_settings" action="#" method="post">
-          <ul>
-              <li>
-                <label for="context">Context:</label>
-                <textarea class="context_input" placeholder="{country: India, gender: female}"></textarea> 
-              </li>
-              <li>
-                <label for="use_context">Use Context:</label>
-                <input type="radio" id="123" name="use_context" value="true" checked>
-                <input type="radio" id="123" name="use_context" value="flase">
-              </li>
-              <li>
-                <label for="threshold">Threshold:</label>
-                0.90 <input type="radio" name="thresh" value="0.90" checked>
-                0.80 <input type="radio" name="thresh" value="0.80">
-                0.70 <input type="radio" name="thresh" value="0.70">
-              </li>
-              <li>
-                <label for="context">Domain: </label>
-                <input type="text" value="Visa" class="field left" readonly>
-              </li>  
-            </ul>
+      <div class="settings">
+        <div style="display: flex">
+          <a href="#" class="setting_links" id="show_settings"> Show settings</a>
+          <a href="#" class="setting_links" id="hide_settings" style="display: none; float: right"> Hide settings</a>
+        </div>  
+        <form id="all_settings" action="#" style="display: none">
+            <div style="display: flex; align-items: center; margin-top: 20px">
+              <label class="label_text" for="context">Context:</label>
+              <textarea class="context_input" name="context" placeholder="{country: India, gender: female}"></textarea> 
+            </div>
+            <div style="margin-top: 20px">
+              <label class="label_text" for="use_context">Use Context:</label>
+              <input type="radio" id="1" name="use_context" value=1 checked> T
+              <input type="radio" id="2" name="use_context" value=0 > F
+            </div>
+            <div style="margin-top: 20px">
+              <label class="label_text" for="threshold">Threshold:</label>
+              <input type="radio" name="thresh" value="0.90" checked>0.90 
+              <input type="radio" name="thresh" value="0.80">0.80 
+              <input type="radio" name="thresh" value="0.70">0.70 
+            </div>
+            <div style="margin-top: 20px">
+              <label class="label_text" for="domain">Domain: </label>
+              <input type="text" name="domain" value="Visa" style="border-radius: 0px" class="label_text" readonly>
+            </div>
         </form>
       </div>
-    </div>  
+    </div>
+
+    <div id="more_info">
+    </div>
+
+    <script type="text/javascript">
+      function getFormData(){
+        var form = $("#all_settings")
+        var unindexed_array = form.serializeArray();
+        var indexed_array = {};
+
+        $.map(unindexed_array, function(n, i){
+            indexed_array[n['name']] = n['value'];
+        });
+
+        indexed_array['query'] = $("#input_query")[0].value;
+        return indexed_array;
+      }
+
+      function getResponse(){
+        var formData = getFormData();
+        return "This is the answer";
+      }
+
+      function addUserQueryToDiv(query){
+        $(".chat_area").append("<div class='user_message'><p class='message'>"+query+"</p></div>");
+      }
+
+      function addBotResponseToDiv(resp){
+        $(".chat_area").append("<div class='bot_message'><p class='message'>"+resp+"</p><span class='show_more message'><a href='#'>Show more</a></span></div>");
+      }
+
+      function showError(error_message){
+        $("#error_div").append("<p class='error'>"+error_message+"</p>")
+        $("#error_div").show()
+        setTimeout(function(){
+          $("#error_div").hide()
+          $("#error_div").html('')
+        }, 3000) 
+      }
+
+      function onQueryChange(event){
+        var key = window.event.keyCode;
+        if (key === 13) {
+          var user_query = $("#input_query")[0].value;
+          if (user_query.length > 5){
+            $("#input_query")[0].value = '';
+            addUserQueryToDiv(user_query);
+
+            
+            $.ajax({
+              type: "POST",
+              url: "http://localhost:5000/response",
+              data: getFormData(),
+              success: function(response){
+                if(response.success && response.data){
+                    addMoreInfoPopup(response.modal_id);
+                    addBotResponseToDiv(response.data);
+                }
+                else{
+                  showError(response.message);
+                }
+              }
+            });
+          }
+          else{
+            showError("The query is too small to process.");
+          }
+        }
+      }
+
+
+      function addMoreInfoPopup(modal_id){
+        popupWindowHTML = "<div class='modal_class' id="+modal_id+">"
+        popupWindowHTML += "<div class='modal_content'>"
+        popupWindowHTML += "<p style='font-weight: 500; color: #a52a2a;'>Please select the appropriate skill</p>"
+        popupWindowHTML += "<div class='popup_close_button' onclick='closePopup()'>X</div></div></div>"
+        $("#more_info")[0].innerHTML += popupWindowHTML;
+      }
+
+      function closePopup(){
+        $(".modal_class").hide();
+      }
+
+      $("#show_settings").on('click', function(){
+        $("#show_settings").hide();
+        $("#all_settings").show();
+        $("#hide_settings").show();
+      });
+
+      $("#hide_settings").on('click', function(){
+        $("#hide_settings").hide();
+        $("#all_settings").hide();
+        $("#show_settings").show();
+      });
+
+      $(".popup_close_button").on('click', function(event){
+        
+      })
+    
+    </script>  
 </body>
 </html>
