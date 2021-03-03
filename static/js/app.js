@@ -79,7 +79,7 @@
         
         $.ajax({
           type: "POST",
-          url: "http://localhost:5000/response",
+          url: "/response",
           contentType: "application/json",
           dataType: "json",
           headers: {
