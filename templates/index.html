@@ -3,15 +3,14 @@
 <head>
     <title>My Webpage</title>
     <script type="text/javascript" src="//code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static', filename='css/app.css') }}">
 </head>
 <body>
-    <div id="menu-bar" style="background-color: antiquewhite;">
+    <div id="menu-bar" style="background-color: black;">
       <nav>
         <ul id="navigation" >
-        {% for item in domains %}
-            <li class="nav_bar" style="display: inline"><a href="#{{item}}">{{ item }}</a></li>
+        {% for id, name in domains.items() %}
+            <li class="nav_bar" style="display: inline"><a href="#{{id}}" class="nav_domains">{{ name }}</a></li>
         {% endfor %}
         </ul>
       </nav>
@@ -20,9 +19,19 @@
     <div id="error_div">
     </div>  
 
-    <div style="display: flex;">
+    <div style="display: flex; margin-top: 20px;">
       <div>
+        <div class="info-box">
+          <li class="nav_bar">
+            <img src='/static/images/bot.jpg' alt='Bot Avatar' class='bot_icon'>
+            <p class="message" style="color: #3A94BA;">Soochna is here for you!</p>
+          </li>
+        </div>
         <div class="chat_area" style="display: inline-grid;">
+          <div class="bot_message" >
+            <img src='/static/images/bot.jpg' alt='Bot Avatar' class='bot_avatar'>
+            <p class="message">How can I help?</p>
+          </div>
         </div>
         <div>
           <input type="input" id="input_query" class="chat_input" onkeypress="onQueryChange();" placeholder="Your query goes here.."></input>
@@ -52,7 +61,7 @@
             </div>
             <div style="margin-top: 20px">
               <label class="label_text" for="domain">Domain: </label>
-              <input type="text" name="domain" value="Visa" style="border-radius: 0px" class="label_text" readonly>
+              <input id="current_domain" type="text" name="domain" value="Visa" style="border-radius: 0px" class="label_text" readonly>
             </div>
         </form>
       </div>
@@ -61,101 +70,6 @@
     <div id="more_info">
     </div>
 
-    <script type="text/javascript">
-      function getFormData(){
-        var form = $("#all_settings")
-        var unindexed_array = form.serializeArray();
-        var indexed_array = {};
-
-        $.map(unindexed_array, function(n, i){
-            indexed_array[n['name']] = n['value'];
-        });
-
-        indexed_array['query'] = $("#input_query")[0].value;
-        return indexed_array;
-      }
-
-      function getResponse(){
-        var formData = getFormData();
-        return "This is the answer";
-      }
-
-      function addUserQueryToDiv(query){
-        $(".chat_area").append("<div class='user_message'><p class='message'>"+query+"</p></div>");
-      }
-
-      function addBotResponseToDiv(resp){
-        $(".chat_area").append("<div class='bot_message'><p class='message'>"+resp+"</p><span class='show_more message'><a href='#'>Show more</a></span></div>");
-      }
-
-      function showError(error_message){
-        $("#error_div").append("<p class='error'>"+error_message+"</p>")
-        $("#error_div").show()
-        setTimeout(function(){
-          $("#error_div").hide()
-          $("#error_div").html('')
-        }, 3000) 
-      }
-
-      function onQueryChange(event){
-        var key = window.event.keyCode;
-        if (key === 13) {
-          var user_query = $("#input_query")[0].value;
-          if (user_query.length > 5){
-            $("#input_query")[0].value = '';
-            addUserQueryToDiv(user_query);
-
-            
-            $.ajax({
-              type: "POST",
-              url: "http://localhost:5000/response",
-              data: getFormData(),
-              success: function(response){
-                if(response.success && response.data){
-                    addMoreInfoPopup(response.modal_id);
-                    addBotResponseToDiv(response.data);
-                }
-                else{
-                  showError(response.message);
-                }
-              }
-            });
-          }
-          else{
-            showError("The query is too small to process.");
-          }
-        }
-      }
-
-
-      function addMoreInfoPopup(modal_id){
-        popupWindowHTML = "<div class='modal_class' id="+modal_id+">"
-        popupWindowHTML += "<div class='modal_content'>"
-        popupWindowHTML += "<p style='font-weight: 500; color: #a52a2a;'>Please select the appropriate skill</p>"
-        popupWindowHTML += "<div class='popup_close_button' onclick='closePopup()'>X</div></div></div>"
-        $("#more_info")[0].innerHTML += popupWindowHTML;
-      }
-
-      function closePopup(){
-        $(".modal_class").hide();
-      }
-
-      $("#show_settings").on('click', function(){
-        $("#show_settings").hide();
-        $("#all_settings").show();
-        $("#hide_settings").show();
-      });
-
-      $("#hide_settings").on('click', function(){
-        $("#hide_settings").hide();
-        $("#all_settings").hide();
-        $("#show_settings").show();
-      });
-
-      $(".popup_close_button").on('click', function(event){
-        
-      })
-    
-    </script>  
+    <script type="text/javascript" src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
 </html>
