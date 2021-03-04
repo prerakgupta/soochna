@@ -71,6 +71,7 @@
   function onQueryChange(event){
     var key = window.event.keyCode;
     if (key === 13) {
+      $(".lds-roller").show();
       var user_query = $("#input_query")[0].value;
       if (user_query.length > 5){
         addUserQueryToDiv(user_query);
@@ -87,6 +88,7 @@
           },
           data: JSON.stringify(getFormData()),
           success: function(response){
+            $(".lds-roller").hide();
             console.log(response);
             if(response.success && response.data){
               [modalId, answer] = getActiveIdAndResponse(response);
@@ -99,6 +101,7 @@
             }
           },
           error: function(response){
+            $(".lds-roller").hide();
             showError("An error has occured. Make sure you have selected a domain.")
           }
         });
