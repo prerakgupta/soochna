@@ -31,11 +31,11 @@
     $(".chat_area").append("<div class='user_message'><img src='/static/images/user.png' alt='User Avatar' class='user_avatar'><p class='message'>"+query+"</p></div>");
   }
 
-  function addBotResponseToDiv(modalId, answer){
+  function addBotResponseToDiv(modalId, answer, multiple){
     BotResponseDiv = "<div class='bot_message'>";
     BotResponseDiv += "<img src='/static/images/bot.jpg' alt='Bot Avatar' class='bot_avatar'>";
     BotResponseDiv += "<p class='message'>"+answer+"</p>";
-    if(answer!=="Sorry I could not find anything relevant."){
+    if(multiple){
       BotResponseDiv += "<span class='show_more'><a href='#' class='small_message' onclick='showMore("+modalId+")'>Show more</a></span>";
     }
     BotResponseDiv += "</div>";
@@ -44,7 +44,7 @@
   }
 
   function getActiveIdAndResponse(resp){
-    if(resp.data && resp.data.length>1){
+    if(resp.data && resp.data.length>0){
       var modal_id = resp.modal_id;
       var answer = resp.data[0].Answer;
     }
@@ -73,7 +73,6 @@
     if (key === 13) {
       var user_query = $("#input_query")[0].value;
       if (user_query.length > 5){
-        $(".chat_area")[0].innerHTML = "";
         addUserQueryToDiv(user_query);
 
         
@@ -92,7 +91,7 @@
             if(response.success && response.data){
               [modalId, answer] = getActiveIdAndResponse(response);
               $("#input_query")[0].value = '';
-              addBotResponseToDiv(modalId, answer);
+              addBotResponseToDiv(modalId, answer, (response.data.length>1));
               addMoreInfoPopup(response, modalId);
             }
             else{
@@ -112,6 +111,7 @@
 
 
   function addMoreInfoPopup(response, modalId){
+
     popupWindowHTML = "<div class='modal_class' id="+modalId+" style='display: none;'>";
     popupWindowHTML += "<div class='modal_content'><table><tr><th>No.</th><th>Answer</th><th>Confidence</th></tr>";
     console.log(response.data);
