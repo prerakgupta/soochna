@@ -10,7 +10,11 @@
       <nav>
         <ul id="navigation" >
         {% for id, name in domains.items() %}
+          {% if id==current %}
+            <li class="nav_bar" style="display: inline"><a href="#{{id}}" class="nav_domains" style="color: #5294e2">{{ name }}</a></li>
+          {% else %}
             <li class="nav_bar" style="display: inline"><a href="#{{id}}" class="nav_domains">{{ name }}</a></li>
+          {% endif %}
         {% endfor %}
         </ul>
       </nav>
@@ -46,22 +50,22 @@
         <form id="all_settings" action="#" style="display: none">
             <div style="display: flex; align-items: center; margin-top: 20px">
               <label class="label_text" for="context">Context:</label>
-              <textarea class="context_input" name="context" placeholder="{country: India, gender: female}"></textarea> 
+              <textarea class="context_input" name="context" placeholder="{'country': 'India', 'gender': 'female'}"></textarea> 
             </div>
             <div style="margin-top: 20px">
               <label class="label_text" for="use_context">Use Context:</label>
-              <input type="radio" id="1" name="use_context" value=1 checked> T
-              <input type="radio" id="2" name="use_context" value=0 > F
+              <input type="radio" id="1" name="use_context" value=1 > T
+              <input type="radio" id="2" name="use_context" value=0 checked> F
             </div>
             <div style="margin-top: 20px">
               <label class="label_text" for="threshold">Threshold:</label>
-              <input type="radio" name="thresh" value="0.90" checked>0.90 
-              <input type="radio" name="thresh" value="0.80">0.80 
-              <input type="radio" name="thresh" value="0.70">0.70 
+              <input type="radio" name="thresh" value="0.80" checked>0.80 
+              <input type="radio" name="thresh" value="0.50">0.50 
+              <input type="radio" name="thresh" value="0.20">0.20
             </div>
             <div style="margin-top: 20px">
               <label class="label_text" for="domain">Domain: </label>
-              <input id="current_domain" type="text" name="domain" value="Visa" style="border-radius: 0px" class="label_text" readonly>
+              <input id="current_domain" type="text" name="domain" value="{{current}}" style="border-radius: 0px" class="label_text" readonly>
             </div>
         </form>
       </div>
