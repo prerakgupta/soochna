@@ -15,7 +15,7 @@ INDEX_DIR_MAP = {"beer": "beer wali", "visa": "visa wali", "movies": "war"}
 
 @app.route('/chat')
 def chat():
-  return render_template('index.html', domains=DOMAIN_MAP)
+  return render_template('index.html', domains=DOMAIN_MAP, current="beer")
 
 
 @app.route('/response', methods=["POST"])
