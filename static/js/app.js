@@ -74,8 +74,6 @@
       $(".lds-roller").show();
       var user_query = $("#input_query")[0].value;
       if (user_query.length > 5){
-        addUserQueryToDiv(user_query);
-
         
         $.ajax({
           type: "POST",
@@ -89,6 +87,7 @@
           data: JSON.stringify(getFormData()),
           success: function(response){
             $(".lds-roller").hide();
+            addUserQueryToDiv(user_query);
             console.log(response);
             if(response.success && response.data){
               [modalId, answer] = getActiveIdAndResponse(response);
@@ -102,6 +101,7 @@
           },
           error: function(response){
             $(".lds-roller").hide();
+	    addUserQueryToDiv(user_query);
             showError("An error has occured. Make sure you have selected a domain.")
           }
         });
